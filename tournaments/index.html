@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tournaments | 4nds Esports</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+        // Immediate Auth Check
+        const user = localStorage.getItem('4ends_current_user');
+        if (!user) {
+            window.location.href = '../profile/';
+        }
+    </script>
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="container">
+            <div class="logo">
+                <a href="../" style="text-decoration: none; color: inherit;">
+                    <span class="logo-text">4ENDS<span class="accent"> ESPORTS</span></span>
+                </a>
+            </div>
+            <nav class="nav-links">
+                <a href="../">Home</a>
+                <a href="#" class="active">Tournaments</a>
+                <a href="../profile/">Profile</a>
+                <a href="../about/">About</a>
+            </nav>
+            <div class="nav-actions">
+                <div id="user-info" class="user-info-area hidden">
+                    <div class="user-avatar-wrapper">
+                        <div class="user-avatar" id="nav-avatar">M</div>
+                        <div class="user-dropdown" id="user-dropdown">
+                            <button class="dropdown-item" id="logout-btn-nav">Logout</button>
+                        </div>
+                    </div>
+                </div>
+                <a href="../profile/" class="btn btn-secondary" id="login-btn">Login</a>
+                <a href="../profile/" class="btn btn-primary" id="connect-btn">Connect</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="section">
+        <div class="container">
+            <h2 class="section-title">Active <span class="accent">Tournaments</span></h2>
+
+            <div class="game-filters">
+                <button class="filter-btn active" data-filter="all">All Games</button>
+                <button class="filter-btn" data-filter="free-fire">Free Fire</button>
+                <button class="filter-btn" data-filter="bgmi">BGMI</button>
+            </div>
+
+            <div class="live-ticker-container">
+                <div class="live-label">LIVE NOW</div>
+                <div class="ticker-wrapper">
+                    <div class="ticker-content" id="live-ticker-content">
+                        <!-- Populated via JS -->
+                        Loading live tournaments...
+                    </div>
+                </div>
+            </div>
+
+            <div class="tournament-grid">
+                <!-- Free Fire - Telugu Elite Series -->
+                <div class="card tournament-card" data-game="free-fire">
+                    <div class="card-image" style="height: auto; background: #000;">
+                        <img src="https://cdn.discordapp.com/attachments/1353636206088556625/1472194031227506870/31025449-12e0-4876-8e21-43a8b6d85ec6.png?ex=6991af09&is=69905d89&hm=3f76e4edf425347b347c765d5f48f5fb3d638ad4c0ee3f7d83acd23006478dfa&"
+                            alt="Telugu Elite Series S5"
+                            style="width: 100%; height: auto; display: block; object-fit: contain;">
+                    </div>
+                    <div class="card-content">
+                        <span class="tag">Live Now</span>
+                        <h3>TELUGU ELITE SERIES S5</h3>
+                        <div class="tournament-meta">
+                            <span>🏆 6,000 INR Pool</span>
+                            <span>👥 Slot 0/12</span>
+                        </div>
+                        <button class="btn btn-outline full-width">Join Tournament</button>
+                    </div>
+                </div>
+
+                <!-- BGMI - Coming Soon -->
+                <div class="card tournament-card" data-game="bgmi">
+                    <div class="card-image"
+                        style="background: url('https://upload.wikimedia.org/wikipedia/en/thumb/3/35/Battlegrounds_Mobile_India_logo.png/220px-Battlegrounds_Mobile_India_logo.png') center/cover; filter: grayscale(1) opacity(0.5);">
+                    </div>
+                    <div class="card-content">
+                        <span class="tag" style="background: var(--glass-border); color: var(--text-muted);">Coming
+                            Soon</span>
+                        <h3>BGMI India Series</h3>
+                        <div class="tournament-meta">
+                            <span>🏆 Pool TBA</span>
+                            <span>� Opening Soon</span>
+                        </div>
+                        <button class="btn btn-outline full-width" disabled
+                            style="opacity: 0.5; cursor: not-allowed;">Registration Locked</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <a href="../" style="text-decoration: none; color: inherit;">
+                            <span class="logo-text">4ENDS<span class="accent"> ESPORTS</span></span>
+                        </a>
+                    </div>
+                    <p>The ultimate destination for competitive esports. Join tournaments, track stats, and connect with
+                        the community.</p>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Platform</h4>
+                    <a href="../tournaments/">Tournaments</a>
+                    <a href="#">Organization</a>
+                    <a href="#">News</a>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Community</h4>
+                    <a href="#">Discord</a>
+                    <a href="#">Blog</a>
+                    <a href="#">Leaderboard</a>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Support</h4>
+                    <a href="#">Contact</a>
+                    <a href="#">FAQ</a>
+                    <a href="#">Terms</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 4ENDS ESPORTS. All rights reserved.</p>
+                <p class="powered-by">powered by rocky._.dev | TeamBrothers</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../main.js"></script>
+    <!-- Free Fire Selection Modal -->
+    <div id="ff-modal" class="modal-overlay">
+        <div class="modal-content profile-card">
+            <button class="modal-close" id="close-ff-modal">&times;</button>
+            <h2 class="section-title" style="margin-bottom: 1.5rem; color: var(--text-main); text-align: center;">Free
+                Fire <span class="accent">Tournaments</span></h2>
+            <div class="modal-options">
+                <div class="modal-option-card" data-type="future">
+                    <div class="option-icon">📅</div>
+                    <h4>Future</h4>
+                    <p>Upcoming registrations</p>
+                </div>
+                <div class="modal-option-card" data-type="live">
+                    <div class="option-icon">📡</div>
+                    <h4>Live Now</h4>
+                    <p>Matches in progress</p>
+                </div>
+                <div class="modal-option-card" data-type="past">
+                    <div class="option-icon">🏆</div>
+                    <h4>Past</h4>
+                    <p>Completed events</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

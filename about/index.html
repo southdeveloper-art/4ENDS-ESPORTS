@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | 4nds Esports</title>
+    <meta name="description"
+        content="Learn about 4nds Esports, our mission, and the team behind the ultimate competitive gaming platform.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="container">
+            <div class="logo">
+                <a href="../" style="text-decoration: none; color: inherit;">
+                    <span class="logo-text">4ENDS<span class="accent"> ESPORTS</span></span>
+                </a>
+            </div>
+            <nav class="nav-links">
+                <a href="../">Home</a>
+                <a href="../tournaments/">Tournaments</a>
+                <a href="../profile/">Profile</a>
+                <a href="#" class="active">About</a>
+            </nav>
+            <div class="nav-actions">
+                <div id="user-info" class="user-info-area hidden">
+                    <div class="user-avatar-wrapper">
+                        <div class="user-avatar" id="nav-avatar">M</div>
+                        <div class="user-dropdown" id="user-dropdown">
+                            <button class="dropdown-item" id="logout-btn-nav">Logout</button>
+                        </div>
+                    </div>
+                </div>
+                <a href="../profile/" class="btn btn-secondary" id="login-btn">Login</a>
+                <a href="../profile/" class="btn btn-primary" id="connect-btn">Connect</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Page Hero -->
+        <section class="section" style="padding-top: 120px; padding-bottom: 4rem; text-align: center;">
+            <div class="container">
+                <h1 class="hero-title" style="font-size: 3.5rem;">ABOUT <span class="glow-text">4ENDS</span></h1>
+                <p class="hero-subtitle" style="margin: 0 auto;">Redefining the competitive esports landscape.</p>
+            </div>
+        </section>
+
+        <!-- Mission Section -->
+        <section class="section bg-alt">
+            <div class="container">
+                <div class="footer-grid" style="grid-template-columns: 1fr 1fr; align-items: center;">
+                    <div>
+                        <h2 class="section-title" style="text-align: left; margin-bottom: 2rem;">OUR MISSION</h2>
+                        <p style="color: var(--text-muted); line-height: 1.8; font-size: 1.1rem; margin-bottom: 2rem;">
+                            At 4nds Esports, we believe that every gamer deserves a stage. Our platform is built to
+                            empower players of all skill levels to compete, improve, and earn recognition.
+                        </p>
+                        <p style="color: var(--text-muted); line-height: 1.8; font-size: 1.1rem;">
+                            We are dedicated to creating a fair, transparent, and electrifying environment where true
+                            skill shines. Whether you are a casual competitor or a pro viewing for the top spot, 4nds is
+                            your arena.
+                        </p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div
+                            style="width: 100%; height: 300px; background: linear-gradient(45deg, rgba(124, 58, 237, 0.1), rgba(0, 242, 255, 0.1)); border: 1px solid var(--glass-border); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
+                            <span style="font-size: 5rem;">🎯</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Values Section -->
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title">CORE VALUES</h2>
+                <div class="footer-grid"
+                    style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); text-align: center;">
+                    <div class="team-card">
+                        <div class="team-logo">🤝</div>
+                        <h3>Community</h3>
+                        <p>Building a supportive and active network of gamers.</p>
+                    </div>
+                    <div class="team-card">
+                        <div class="team-logo">⚖️</div>
+                        <h3>Integrity</h3>
+                        <p>Ensuring fair play and transparent competition for all.</p>
+                    </div>
+                    <div class="team-card">
+                        <div class="team-logo">🚀</div>
+                        <h3>Innovation</h3>
+                        <p>Constantly evolving to bring the best features to you.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <a href="../" style="text-decoration: none; color: inherit;">
+                            <span class="logo-text">4ENDS<span class="accent"> ESPORTS</span></span>
+                        </a>
+                    </div>
+                    <p>The ultimate destination for competitive esports. Join tournaments, track stats, and connect with
+                        the community.</p>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Platform</h4>
+                    <a href="../tournaments/">Tournaments</a>
+                    <a href="#">Organization</a>
+                    <a href="#">News</a>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Community</h4>
+                    <a href="#">Discord</a>
+                    <a href="#">Blog</a>
+                    <a href="#">Leaderboard</a>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Support</h4>
+                    <a href="#">Contact</a>
+                    <a href="#">FAQ</a>
+                    <a href="#">Terms</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 4ENDS ESPORTS. All rights reserved.</p>
+                <p class="powered-by">powered by rocky._.dev | TeamBrothers</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../main.js"></script>
+</body>
+
+</html>
