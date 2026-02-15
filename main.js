@@ -710,7 +710,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             item.addEventListener('click', () => {
                 if (item.classList.contains('coming-soon')) {
-                    alert('This game is coming soon! Please select from available games (BGMI or Free Fire).');
+                    alert('This game is coming soon! Please select from available games.');
                     return;
                 }
 
@@ -719,11 +719,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     item.classList.remove('selected');
                     selectedGames = selectedGames.filter(x => x !== g);
                 } else {
-                    if (selectedGames.length < 2) {
+                    if (selectedGames.length < 4) {
                         item.classList.add('selected');
                         selectedGames.push(g);
                     } else {
-                        alert('You can only select 2 games.');
+                        alert('You can select up to 4 games.');
                     }
                 }
             });
