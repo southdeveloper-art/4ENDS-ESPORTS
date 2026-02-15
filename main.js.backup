@@ -1,0 +1,774 @@
+// Basic interactions for 4nds Esports website
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth'
+                });
+
+                // Update active link
+                document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+                this.classList.add('active');
+            }
+        });
+    });
+
+    // Navbar transparency on scroll
+    const navbar = document.querySelector('.navbar');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar.style.padding = '1rem 0';
+            navbar.style.background = 'rgba(10, 11, 16, 0.95)';
+        } else {
+            navbar.style.padding = '1.5rem 0';
+            navbar.style.background = 'rgba(10, 11, 16, 0.8)';
+        }
+    });
+
+    // Add hover sound/effect logic here if needed
+    // FAQ Accordion
+    document.querySelectorAll('.faq-question').forEach(question => {
+        question.addEventListener('click', () => {
+            const item = question.parentElement;
+            item.classList.toggle('active');
+        });
+    });
+
+    // Add scroll animations for sections
+    const observerOptions = {
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.section').forEach(section => {
+        section.style.opacity = '0';
+        section.style.transform = 'translateY(30px)';
+        section.style.transition = 'all 0.8s ease-out';
+        observer.observe(section);
+    });
+
+    const users = JSON.parse(localStorage.getItem('4ends_users')) || {};
+    // const users = {}; // Reset to empty, removed hardcoded data.
+    let currentUser = JSON.parse(localStorage.getItem('4ends_current_user')) || null;
+
+    // --- Access Control ---
+    // If on Tournaments page and not logged in, redirect to Profile (Login)
+    if (window.location.pathname.includes('tournaments') && !currentUser) {
+        window.location.href = '../profile/';
+    }
+
+    // Admin Access Configuration
+    const ADMIN_EMAILS = ['admin@4ends.com', 'southdeveloperr@gmail.com']; // User to provide more gmails
+
+    const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1472097991811792917/SyiA_rYwRzta_qOA3A4UauIZSgnTag_5rcj7dARI-3IUU5FJsVw0eIW74MUD6yngMYh2";
+
+    const sendDiscordLog = async (event, user) => {
+        saveLocalLog(event, user);
+        try {
+            await fetch(DISCORD_WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    embeds: [{
+                        title: `User ${event}`,
+                        color: event === 'Login' ? 65280 : 16711680, // Green for login, Red for logout
+                        fields: [
+                            { name: 'Username', value: user.username || 'Unknown', inline: true },
+                            { name: 'Email', value: user.email || 'Unknown', inline: true },
+                            { name: 'Time', value: new Date().toLocaleString(), inline: false }
+                        ],
+                        footer: { text: '4ENDS ESPORTS Bot' }
+                    }]
+                })
+            });
+        } catch (err) {
+            console.error('Webhook failed:', err);
+        }
+    };
+
+    // --- Multi-Page Logic Detectors ---
+    const isProfilePage = window.location.pathname.includes('/profile');
+    const isHomePage = !isProfilePage && !window.location.pathname.includes('/tournaments');
+    const navAvatar = document.getElementById('nav-avatar');
+    const userDropdown = document.getElementById('user-dropdown');
+    const authContainer = document.getElementById('auth-container');
+    const profileDashboard = document.getElementById('profile-dashboard');
+
+    const updateUIState = () => {
+        // Shared Navbar Updates
+        const navActions = document.querySelector('.nav-actions');
+        const loginBtn = document.getElementById('login-btn');
+        const connectBtn = document.getElementById('connect-btn');
+        const userInfo = document.getElementById('user-info');
+        const navCtaButtons = document.getElementById('nav-cta-buttons');
+
+        if (currentUser) {
+            // Logged In
+            if (loginBtn) loginBtn.classList.add('hidden');
+            if (connectBtn) connectBtn.classList.add('hidden');
+            if (userInfo) userInfo.classList.remove('hidden');
+
+            if (navAvatar) {
+                navAvatar.textContent = currentUser.username ? currentUser.username.charAt(0).toUpperCase() : '?';
+                navAvatar.style.background = '#00f2ff';
+            }
+
+            // Show Admin stuff if applicable
+            if (ADMIN_EMAILS.includes(currentUser.email)) {
+                if (navCtaButtons) {
+                    navCtaButtons.querySelectorAll('.nav-btn-social').forEach(btn => btn.classList.remove('hidden'));
+                }
+            }
+        } else {
+            // Logged Out
+            if (loginBtn) loginBtn.classList.remove('hidden');
+            if (connectBtn) connectBtn.classList.remove('hidden');
+            if (userInfo) userInfo.classList.add('hidden');
+            if (navCtaButtons) {
+                navCtaButtons.querySelectorAll('.nav-btn-social').forEach(btn => btn.classList.add('hidden'));
+            }
+        }
+
+        // --- Page Specific UI ---
+        if (isProfilePage) {
+            if (currentUser) {
+                // Show Profile Dashboard, Hide Login Form
+                if (authContainer) authContainer.classList.add('hidden');
+                if (profileDashboard) {
+                    profileDashboard.classList.remove('hidden');
+                    // Pre-fill profile if active
+                    loadProfileData();
+                }
+            } else {
+                // Show Login Form, Hide Profile Dashboard
+                if (authContainer) authContainer.classList.remove('hidden');
+                if (profileDashboard) profileDashboard.classList.add('hidden');
+            }
+        }
+    };
+
+    // --- Profile Data Loader ---
+    const loadProfileData = () => {
+        const avatarLarge = document.getElementById('setup-avatar');
+        // Simple mock load (since we store minimal data in local for now)
+        if (avatarLarge) avatarLarge.textContent = currentUser.username.charAt(0).toUpperCase();
+        // If we had input fields for editing, we would fill them here
+    };
+    // --- Orphaned code removed ---
+
+    // Open/Close Modals
+
+
+    // Updated close logic for multiple modals
+    document.querySelectorAll('.modal-close').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.target.closest('.modal').classList.remove('active');
+        });
+    });
+
+    // User Dropdown Toggle
+    navAvatar.addEventListener('click', (e) => {
+        e.stopPropagation();
+        userDropdown.classList.toggle('active');
+    });
+
+    document.addEventListener('click', () => {
+        userDropdown.classList.remove('active');
+    });
+
+
+
+    // const googlePicker = document.getElementById('google-picker-modal'); // Removed
+
+    // Google Login - Show Picker
+    // Google Login - Show Picker (Now handled by GIS Button inside modal)
+    // We don't need a click listener on a custom button anymore 
+    // because the Google button is rendered directly.
+    /*
+    document.getElementById('google-login').addEventListener('click', () => {
+        // ...
+    });
+    */
+
+    // Unified handleAuth for all login methods
+    // Unified handleAuth for all login methods
+    const handleAuth = (email, type = 'email') => {
+        if (!email || !email.includes('@')) {
+            alert('Please enter a valid email address.');
+            return;
+        }
+
+        // Google Auto-Login
+        if (type === 'google') {
+            if (users[email]) {
+                loginUser(users[email]);
+            } else {
+                startOnboarding(email, type);
+            }
+            return;
+        }
+
+        // Email Login
+        if (users[email]) {
+            const passwordGroup = document.getElementById('password-group');
+            const passwordInput = document.getElementById('password-input');
+            const passwordBtn = document.getElementById('password-login-btn');
+
+            if (passwordGroup) passwordGroup.classList.remove('hidden');
+            if (passwordInput) passwordInput.focus();
+
+            // Clear previous listeners
+            const newBtn = passwordBtn.cloneNode(true);
+            passwordBtn.parentNode.replaceChild(newBtn, passwordBtn);
+
+            newBtn.addEventListener('click', () => {
+                const enteredPass = passwordInput.value;
+                if (enteredPass === users[email].password) {
+                    loginUser(users[email]);
+                } else {
+                    alert('Incorrect Password!');
+                }
+            });
+        } else {
+            startOnboarding(email, type);
+        }
+    };
+
+    const loginUser = (user) => {
+        currentUser = user;
+        if (ADMIN_EMAILS.includes(user.email)) currentUser.isAdmin = true;
+        localStorage.setItem('4ends_current_user', JSON.stringify(currentUser));
+        updateUIState();
+        sendDiscordLog('Login', currentUser);
+        sessionStorage.setItem('show_social_popup', 'true'); // Trigger popup
+
+        // Reset UI State
+        const passwordGroup = document.getElementById('password-group');
+        if (passwordGroup) passwordGroup.classList.add('hidden');
+        const passwordInput = document.getElementById('password-input');
+        if (passwordInput) passwordInput.value = '';
+    };
+
+    // --- Google Identity Services (GIS) Logic ---
+
+    // Decode JWT (Basic implementation)
+    const parseJwt = (token) => {
+        try {
+            return JSON.parse(atob(token.split('.')[1]));
+        } catch (e) {
+            return null;
+        }
+    };
+
+    const handleCredentialResponse = (response) => {
+        console.log("Encoded JWT ID token: " + response.credential);
+        const responsePayload = parseJwt(response.credential);
+
+        if (responsePayload) {
+            // Auto-fill user data if new
+            const email = responsePayload.email;
+
+            // In a real app, verify signature on backend.
+            handleAuth(email, 'google');
+
+            // Update Avatar if allowed/needed
+            if (users[email] && !users[email].avatar) {
+                users[email].avatar = responsePayload.picture;
+                localStorage.setItem('4ends_users', JSON.stringify(users));
+            }
+            if (currentUser && !currentUser.avatar) {
+                currentUser.avatar = responsePayload.picture;
+                localStorage.setItem('4ends_current_user', JSON.stringify(currentUser));
+                updateUIState();
+            }
+        }
+    };
+
+    // Initialize Google Button
+    window.onload = function () {
+        if (typeof google !== 'undefined') {
+            google.accounts.id.initialize({
+                client_id: "274347806492-pt63kvip6of0c4o9ucb7t381q8r6fdn5.apps.googleusercontent.com", // Real Client ID
+                callback: handleCredentialResponse,
+                auto_select: false,
+                cancel_on_tap_outside: false
+            });
+
+            // Render the button
+            const btnContainer = document.getElementById("google-btn-container");
+            if (btnContainer) {
+                google.accounts.id.renderButton(
+                    btnContainer,
+                    { theme: "filled_black", size: "large", width: "100%" }  // Dark theme
+                );
+                // google.accounts.id.prompt(); // also display the One Tap dialog
+            }
+        }
+    };
+
+    // Google Picker Listeners Removed (Simulated)
+
+    // 3. Direct Email Input (Normal Email)
+    document.getElementById('email-next').addEventListener('click', () => {
+        const email = document.getElementById('email-input').value;
+        if (email) {
+            // authModal.classList.remove('active'); // Don't close yet, waiting for password
+            handleAuth(email, 'email');
+        }
+    });
+
+    const startOnboarding = (email, type = 'email') => {
+        if (authContainer) authContainer.classList.add('hidden');
+        if (profileDashboard) profileDashboard.classList.remove('hidden');
+
+        const emailField = document.getElementById('profile-email');
+        if (emailField) emailField.value = email;
+
+        // Hide/Show Password Fields based on type
+        const passRow = document.querySelector('#reg-password').closest('.form-row');
+        if (passRow) {
+            if (type === 'google') {
+                passRow.style.display = 'none';
+            } else {
+                passRow.style.display = 'flex';
+            }
+        }
+
+        // Reset locked fields for new user
+        const fields = ['gender', 'dob', 'mobile-number', 'country'];
+        fields.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.disabled = false;
+        });
+
+        showStep(1);
+    };
+
+
+
+    // Cancel Onboarding
+    // Cancel Onboarding
+    const cancelBtn = document.getElementById('cancel-profile');
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+            // Return to Login View
+            if (authContainer) authContainer.classList.remove('hidden');
+            if (profileDashboard) profileDashboard.classList.add('hidden');
+        });
+    }
+
+    // Avatar Upload Logic
+    const avatarInput = document.getElementById('avatar-upload');
+    const setupAvatar = document.getElementById('setup-avatar');
+    // navAvatar already declared above
+
+    avatarInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            if (['image/jpeg', 'image/png'].includes(file.type)) {
+                const reader = new FileReader();
+                reader.onload = (readerEvent) => {
+                    const base64 = readerEvent.target.result;
+                    setupAvatar.innerHTML = `<img src="${base64}" style="width:100%; height:100%; border-radius:20px; object-fit:cover;">`;
+                    if (currentUser) {
+                        currentUser.avatar = base64;
+                    }
+                };
+                reader.readAsDataURL(file);
+            } else {
+                alert('Please upload only .jpg or .png images.');
+                avatarInput.value = '';
+            }
+        }
+    });
+
+    // Step Navigation
+    const showStep = (step) => {
+        document.querySelectorAll('.profile-step-view').forEach(v => v.classList.remove('active'));
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+
+        document.getElementById(`step-${step}`).classList.add('active');
+        document.getElementById(`step-nav-${step}`).classList.add('active');
+    };
+
+    document.getElementById('to-step-2').addEventListener('click', () => {
+        const name = document.getElementById('full-name').value;
+        const user = document.getElementById('username').value;
+        if (name && user) showStep(2);
+        else alert('Please fill required fields');
+    });
+
+    document.getElementById('back-to-1').addEventListener('click', (e) => {
+        e.preventDefault();
+        showStep(1);
+    });
+    document.getElementById('to-step-3').addEventListener('click', (e) => {
+        e.preventDefault();
+        // Skip Step 3 and Finish
+        // For UI flow, we just hiding Step 3 in HTML, so Step 2 should lead to Finish? 
+        // Logic moved to Finish Button directly
+    });
+    document.getElementById('back-to-2').addEventListener('click', (e) => {
+        e.preventDefault();
+        showStep(2);
+    });
+
+    // Game Selection
+    let selectedGames = [];
+    document.querySelectorAll('.game-item').forEach(item => {
+        item.addEventListener('click', () => {
+            // "Coming Soon" games are now selectable, just labeled.
+
+            const game = item.getAttribute('data-game');
+            if (item.classList.contains('selected')) {
+                item.classList.remove('selected');
+                selectedGames = selectedGames.filter(g => g !== game);
+            } else {
+                if (selectedGames.length < 2) {
+                    item.classList.add('selected');
+                    selectedGames.push(game);
+                } else {
+                    alert('You can only select 2 games.');
+                }
+            }
+        });
+    });
+
+    // Finish Onboarding / Save Profile
+    const finishBtn = document.getElementById('finish-profile');
+    if (finishBtn) {
+        finishBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            // Determine which user we are editing (Current or Admin Selection)
+            const targetEmail = adminEditingEmail ? adminEditingEmail : document.getElementById('profile-email').value;
+            const existingUser = users[targetEmail];
+
+            // Safe value getter
+            const val = (id) => {
+                const el = document.getElementById(id);
+                return el ? el.value : '';
+            };
+
+            const username = val('username');
+            const fullName = val('full-name');
+            const phone = val('mobile-number');
+            const country = val('country');
+            const pass = val('reg-password');
+            const confirmPass = val('reg-confirm-password');
+
+            if (!username || !fullName || !phone || !country) {
+                alert('Profile Incomplete! Please fill in all fields (Name, Username, Mobile, Country).');
+                showStep(1);
+                return;
+            }
+
+            // Password Validation for Email users
+            // Check if password fields are visible (meaning it's an email registration)
+            const passRow = document.querySelector('#reg-password').closest('.form-row');
+            if (passRow.style.display !== 'none') {
+                if (!pass || !confirmPass) {
+                    alert('Please enter a password.');
+                    showStep(1);
+                    return;
+                }
+                if (pass !== confirmPass) {
+                    alert('Passwords do not match!');
+                    showStep(1);
+                    return;
+                }
+            }
+
+            if (existingUser) {
+                existingUser.username = username;
+                existingUser.fullName = fullName;
+                existingUser.phone = phone;
+                existingUser.country = country;
+                // Update password if provided in edit
+                if (pass && passRow.style.display !== 'none') existingUser.password = pass;
+
+                users[targetEmail] = existingUser;
+
+                // Only update current session if we are editing ourselves
+                if (!adminEditingEmail || adminEditingEmail === currentUser.email) {
+                    loginUser(existingUser);
+                }
+
+                alert(`User ${targetEmail} updated successfully!`);
+            } else {
+                if (selectedGames.length !== 2) {
+                    alert('Please select exactly 2 games.');
+                    showStep(2);
+                    return;
+                }
+                const userData = {
+                    email: targetEmail,
+                    username: username,
+                    fullName: fullName,
+                    gender: val('gender'),
+                    dob: val('dob'),
+                    phone: phone,
+                    country: country,
+                    preferences: selectedGames,
+                    password: (passRow.style.display !== 'none') ? pass : 'GOOGLE_AUTH',
+                    avatar: null
+                };
+
+                users[targetEmail] = userData;
+
+                if (!adminEditingEmail) {
+                    loginUser(userData);
+                    sendDiscordLog('Registration Complete', userData);
+                }
+            }
+
+            localStorage.setItem('4ends_users', JSON.stringify(users));
+
+            // Hide overlay and update state
+            // Hide overlay and update state
+            // If finishing, redirect to Tournaments
+            if (!adminEditingEmail) {
+                updateUIState();
+                sendDiscordLog('Login', currentUser);
+                sessionStorage.setItem('show_social_popup', 'true'); // Trigger popup
+                window.location.href = '../tournaments/';
+            }
+
+            // Reset Admin Flag
+            if (adminEditingEmail) {
+                adminEditingEmail = null;
+                // Re-open admin dashboard to see changes? Optional.
+                const title = document.querySelector('#step-1 h2');
+                if (title) title.innerHTML = `JOIN THE <span class="accent">COMMAND</span>`;
+            }
+
+            // Ensure redirect to main view
+            window.scrollTo(0, 0);
+            console.log('Setup finished and closed.');
+        });
+    }
+
+    const exportUsersJSON = () => {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(users, null, 2));
+        const downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", "4ends_user_database.json");
+        document.body.appendChild(downloadAnchorNode);
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+        alert('User database exported to 4ends_user_database.json!');
+    };
+
+    const saveLocalLog = (event, user) => {
+        const logs = JSON.parse(localStorage.getItem('4ends_logs')) || [];
+        logs.unshift({
+            event: event,
+            username: user.username,
+            email: user.email,
+            time: new Date().toLocaleString()
+        });
+        localStorage.setItem('4ends_logs', JSON.stringify(logs.slice(0, 100))); // Keep last 100
+    };
+
+    const renderLocalLogs = () => {
+        const container = document.getElementById('logs-container');
+        const logs = JSON.parse(localStorage.getItem('4ends_logs')) || [];
+        if (logs.length === 0) {
+            container.innerHTML = '<div style="color: var(--text-muted);">No logs available.</div>';
+            return;
+        }
+        container.innerHTML = logs.map(log => `
+            <div style="border-bottom: 1px solid rgba(255,255,255,0.05); padding: 0.5rem 0;">
+                <span style="color: var(--primary)">[${log.time}]</span> 
+                <span style="color: #fff">User: ${log.username}</span> 
+                <span style="color: var(--text-muted)">- ${log.event}</span>
+            </div>
+        `).join('');
+    };
+
+    // Logout Logic
+    document.getElementById('logout-btn-nav').addEventListener('click', () => {
+        sendDiscordLog('Logout', currentUser);
+        currentUser = null;
+        localStorage.removeItem('4ends_current_user');
+        updateUIState();
+        userDropdown.classList.remove('active');
+        // Clear locked fields state
+        document.querySelectorAll('input, select').forEach(el => el.disabled = false);
+    });
+
+    const maskPhone = (phone) => {
+        if (!phone) return '';
+        const clean = phone.replace(/\s/g, '');
+        if (clean.length < 5) return phone;
+        return clean.slice(0, 2) + '*'.repeat(clean.length - 5) + clean.slice(-3);
+    };
+
+    // Edit Profile Logic
+    document.getElementById('edit-profile-btn').addEventListener('click', () => {
+        if (currentUser) {
+            profileSetup.classList.remove('hidden');
+            document.getElementById('profile-email').value = currentUser.email;
+            document.getElementById('username').value = currentUser.username;
+            document.getElementById('full-name').value = currentUser.fullName;
+            document.getElementById('gender').value = currentUser.gender || '';
+            document.getElementById('dob').value = currentUser.dob || '';
+
+            // Mask mobile for security but show it in disabled field
+            document.getElementById('mobile-number').value = maskPhone(currentUser.phone);
+            document.getElementById('country').value = currentUser.country || '';
+
+            // Lock fixed fields
+            document.getElementById('gender').disabled = true;
+            document.getElementById('dob').disabled = true;
+            document.getElementById('mobile-number').disabled = true;
+            document.getElementById('country').disabled = true;
+
+            userDropdown.classList.remove('active');
+            showStep(1);
+        }
+    });
+
+    // Admin Dashboard listener
+    // Admin Dashboard - Disabled for cleanup
+    const adminLogsModal = document.getElementById('admin-logs-modal'); // likely null
+    /*
+    document.getElementById('admin-dash-btn').addEventListener('click', (e) => {
+         // ...
+    });
+    */
+
+    document.getElementById('clear-logs-btn').addEventListener('click', () => {
+        if (confirm('Are you sure you want to clear all system logs?')) {
+            localStorage.removeItem('4ends_logs');
+            renderLocalLogs();
+        }
+    });
+
+    document.getElementById('download-logs-btn').addEventListener('click', () => {
+        const logs = JSON.parse(localStorage.getItem('4ends_logs')) || [];
+        const csv = "Time,Username,Email,Event\n" + logs.map(l => `${l.time},${l.username},${l.email},${l.event}`).join("\n");
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.setAttribute('hidden', '');
+        a.setAttribute('href', url);
+        a.setAttribute('download', '4ends_system_logs.csv');
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    });
+
+    // Social Buttons Actions
+    document.getElementById('org-btn').addEventListener('click', (e) => {
+        e.preventDefault();
+        const confirmMsg = `Welcome to Organization Management, ${currentUser.username}!\n\nYou can now create tournaments. Would you like to create a new one? (Bypasses manual owner confirmation for demo)`;
+        if (confirm(confirmMsg)) {
+            const tournamentName = prompt('Enter Tournament Name:');
+            if (tournamentName) {
+                alert(`SUCCESS: Tournament "${tournamentName}" has been created and published instantly!`);
+                sendDiscordLog(`Created Tournament: ${tournamentName}`, currentUser);
+            }
+        }
+    });
+
+    document.getElementById('clan-btn').addEventListener('click', (e) => {
+        e.preventDefault();
+        alert('Clan Management coming soon!');
+    });
+
+    document.getElementById('teams-btn').addEventListener('click', (e) => {
+        e.preventDefault();
+        alert('Teams Management coming soon!');
+    });
+
+    // Initialize state
+    updateUIState();
+    checkSocialPopup(); // Check for popup flag
+
+    console.log('4ENDS ESPORTS Website initialized with Wallet and Auth.');
+});
+
+// --- Social Popup Logic ---
+const checkSocialPopup = () => {
+    if (sessionStorage.getItem('show_social_popup') === 'true') {
+        createSocialPopup();
+        sessionStorage.removeItem('show_social_popup');
+    }
+};
+
+const createSocialPopup = () => {
+    const popupHTML = `
+        <div class="popup-overlay active" id="social-popup-overlay">
+            <div class="social-popup">
+                <button class="popup-close" id="close-social-popup">&times;</button>
+                <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem;">Join the <span class="accent">Community</span></h2>
+                <p style="color: var(--text-muted);">Stay updated with tournaments, news, and giveaways!</p>
+                
+                <div class="social-grid">
+                    <a href="#" class="social-card whatsapp" target="_blank">
+                        <span class="social-icon">📱</span>
+                        <span>WhatsApp</span>
+                    </a>
+                    <a href="#" class="social-card instagram" target="_blank">
+                        <span class="social-icon">📸</span>
+                        <span>Instagram</span>
+                    </a>
+                    <a href="#" class="social-card youtube" target="_blank">
+                        <span class="social-icon">▶️</span>
+                        <span>YouTube</span>
+                    </a>
+                    <a href="#" class="social-card discord" target="_blank">
+                        <span class="social-icon">💬</span>
+                        <span>Discord</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', popupHTML);
+
+    document.getElementById('close-social-popup').addEventListener('click', () => {
+        document.getElementById('social-popup-overlay').classList.remove('active');
+        setTimeout(() => {
+            document.getElementById('social-popup-overlay').remove();
+        }, 300);
+    });
+};
+
+// --- Login Card Tilt Effect ---
+document.addEventListener('mousemove', (e) => {
+    const card = document.querySelector('.profile-card');
+    if (!card) return;
+
+    const x = e.clientX;
+    const y = e.clientY;
+
+    // Middle of screen
+    const midX = window.innerWidth / 2;
+    const midY = window.innerHeight / 2;
+
+    // Offset from middle
+    const offsetX = x - midX;
+    const offsetY = y - midY;
+
+    // Calc rotation (max 15deg)
+    const rotateX = (offsetY / midY) * -10; // Inverted Y Axis
+    const rotateY = (offsetX / midX) * 10;
+
+    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+});

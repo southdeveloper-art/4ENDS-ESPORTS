@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4nds Esports | Prime Competitive Gaming</title>
+    <meta name="description"
+        content="Experience the next level of competitive gaming with 4nds Esports. Join tournaments, track stats, and connect with the community.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="container">
+            <div class="logo">
+                <a data-href="./" class="logo-link nav-link" style="text-decoration: none; color: inherit;">
+                    <span class="logo-text">4ENDS<span class="accent"> ESPORTS</span></span>
+                </a>
+            </div>
+            <nav class="nav-links">
+                <a data-href="#home" class="active nav-link">Home</a>
+                <a data-href="tournaments/" class="nav-link">Tournaments</a>
+                <a data-href="profile/" class="nav-link">Profile</a>
+                <a data-href="about/" class="nav-link">About</a>
+            </nav>
+            <div class="nav-actions">
+                <div id="user-info" class="user-info-area hidden">
+                    <div class="user-avatar-wrapper">
+                        <div class="user-avatar" id="nav-avatar">M</div>
+                        <div class="user-dropdown" id="user-dropdown">
+                            <button class="dropdown-item" id="logout-btn-nav">Logout</button>
+                        </div>
+                    </div>
+                </div>
+                <a data-href="profile/" class="btn btn-secondary nav-link" id="login-btn">Login</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="hero-glow"></div>
+            <div class="container hero-content">
+                <h1 class="hero-title">DOMINATE THE <span class="glow-text">ARENA</span></h1>
+                <p class="hero-subtitle">The ultimate destination for competitive esports. Join the elite community of
+                    4nds Esports today.</p>
+                <div class="hero-cta">
+                    <div id="guest-cta">
+                        <a data-href="tournaments/" class="btn btn-primary btn-lg nav-link">Browse Tournaments</a>
+                        <button class="btn btn-outline btn-lg">Join the Discord</button>
+                    </div>
+                    <div id="logged-in-cta" class="hidden"
+                        style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                        <button id="hero-create-team-btn" class="btn btn-primary btn-lg">Create Team</button>
+                        <button id="hero-create-org-btn" class="btn btn-outline btn-lg">Create Organization</button>
+                    </div>
+                </div>
+
+                <div class="live-ticker-container" style="margin-top: 3rem; margin-bottom: 0;">
+                    <div class="live-label">LIVE NOW</div>
+                    <div class="ticker-wrapper">
+                        <div class="ticker-content" id="live-ticker-content">
+                            Loading live tournaments...
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-value">$250K+</span>
+                        <span class="stat-label">Prize Pools</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">50K+</span>
+                        <span class="stat-label">Players</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">1.2K</span>
+                        <span class="stat-label">Tournaments</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- (Tournaments Section Removed - moved to tournaments/index.html) -->
+
+        <!-- How It Works Section -->
+        <section id="how-it-works" class="section">
+            <div class="container text-center">
+                <h2 class="section-title">How It <span class="accent">Works</span></h2>
+                <p class="section-subtitle" style="margin: -2rem auto 3rem;">Get started in just a few simple steps.</p>
+
+                <div class="role-selector-container">
+                    <div class="role-toggle" id="role-toggle">
+                        <div class="toggle-slider"></div>
+                        <button class="role-btn active" data-role="player">I'm a Team/Player</button>
+                        <button class="role-btn" data-role="organizer">I'm an Organization</button>
+                    </div>
+                </div>
+
+                <!-- Player View -->
+                <div class="feature-steps active" id="player-steps">
+                    <div class="steps-grid">
+                        <div class="step-card">
+                            <div class="step-number">1</div>
+                            <div class="step-icon">🔍</div>
+                            <h3>Browse Tournaments</h3>
+                            <p>Explore events by game, region, prize pool, or skill level.</p>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">2</div>
+                            <div class="step-icon">📝</div>
+                            <h3>Register & Check-in</h3>
+                            <p>Sign up with your team or solo, and confirm your spot.</p>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">3</div>
+                            <div class="step-icon">🏆</div>
+                            <h3>Play & Win</h3>
+                            <p>Compete in matches, climb brackets, and claim rewards.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Organizer View -->
+                <div class="feature-steps" id="organizer-steps">
+                    <div class="steps-grid">
+                        <div class="step-card">
+                            <div class="step-number">1</div>
+                            <div class="step-icon">➕</div>
+                            <h3>Create Your Event</h3>
+                            <p>Set up brackets, rules, schedules, and prize pools.</p>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">2</div>
+                            <div class="step-icon">👥</div>
+                            <h3>Manage Participants</h3>
+                            <p>Handle registrations, seeding, and match scheduling.</p>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-number">3</div>
+                            <div class="step-icon">💰</div>
+                            <h3>Earn & Grow</h3>
+                            <p>Collect entry fees, attract sponsors, and build your brand.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Post-Login "Select Your Path" Buttons (Hidden by default) -->
+                <div id="role-choice-area" class="role-choice-area hidden" style="margin-top: 5rem;">
+                    <h3 style="margin-bottom: 2rem;">Select Your Role to Continue</h3>
+                    <div class="choice-buttons">
+                        <button class="btn btn-primary btn-lg role-choice-btn" data-role="player">Enter as
+                            Team/Player</button>
+                        <button class="btn btn-outline btn-lg role-choice-btn" data-role="organizer">Enter as
+                            Organization</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Teams Section -->
+        <section id="teams" class="section bg-alt">
+            <!-- ... (Teams content kept) ... -->
+        </section>
+
+        <!-- Features Section -->
+        <!-- ... (Features content kept) ... -->
+
+        <!-- FAQ Section -->
+        <!-- ... (FAQ content kept) ... -->
+
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <a data-href="#" class="nav-link" style="text-decoration: none; color: inherit;">
+                            <span class="logo-text">4ENDS<span class="accent"> ESPORTS</span></span>
+                        </a>
+                    </div>
+                    <p>The ultimate destination for competitive esports. Join tournaments, track stats, and connect with
+                        the community.</p>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Platform</h4>
+                    <a data-href="tournaments/" class="nav-link">Tournaments</a>
+                    <a data-href="#" class="nav-link">Organization</a>
+                    <a data-href="#" class="nav-link">News</a>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Community</h4>
+                    <a data-href="#" class="nav-link">Discord</a>
+                    <a data-href="#" class="nav-link">Blog</a>
+                    <a data-href="#" class="nav-link">Leaderboard</a>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Support</h4>
+                    <a data-href="#" class="nav-link">Contact</a>
+                    <a data-href="#" class="nav-link">FAQ</a>
+                    <a data-href="#" class="nav-link">Terms</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 4ENDS ESPORTS. All rights reserved.</p>
+                <p class="powered-by">powered by rocky._.dev | TeamBrothers</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Team Management Modals -->
+
+    <!-- Create Team Modal -->
+    <div id="create-team-modal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close"
+                onclick="document.getElementById('create-team-modal').classList.remove('active')">&times;</button>
+            <h2 style="margin-bottom: 2rem;">Create Your <span class="accent">Team</span></h2>
+            <form id="create-team-form">
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">Team Name</label>
+                    <input type="text" id="team-name" placeholder="Enter team name" required
+                        style="width: 100%; padding: 0.75rem; background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-main);">
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">🎯 Rusher</label>
+                    <input type="email" id="team-rusher" placeholder="rusher@example.com" required
+                        style="width: 100%; padding: 0.75rem; background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-main);">
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">🛡️
+                        Secondary</label>
+                    <input type="email" id="team-secondary" placeholder="secondary@example.com" required
+                        style="width: 100%; padding: 0.75rem; background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-main);">
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">⚡ All-round</label>
+                    <input type="email" id="team-allround" placeholder="allround@example.com" required
+                        style="width: 100%; padding: 0.75rem; background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-main);">
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">🎯 Sniper</label>
+                    <input type="email" id="team-sniper" placeholder="sniper@example.com" required
+                        style="width: 100%; padding: 0.75rem; background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-main);">
+                </div>
+                <button type="submit" class="btn btn-primary full-width">Create Team</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Join Team Modal -->
+    <div id="join-team-modal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close"
+                onclick="document.getElementById('join-team-modal').classList.remove('active')">&times;</button>
+            <h2 style="margin-bottom: 2rem;">Join a <span class="accent">Team</span></h2>
+            <form id="join-team-form">
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">Enter Invite
+                        Code</label>
+                    <input type="text" id="join-team-code" placeholder="ABC12345" required maxlength="8"
+                        style="width: 100%; padding: 0.75rem; background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-main); text-transform: uppercase; letter-spacing: 2px; text-align: center; font-size: 1.2rem;">
+                </div>
+                <button type="submit" class="btn btn-primary full-width">Join Team</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Organization Modal -->
+    <div id="create-org-modal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close"
+                onclick="document.getElementById('create-org-modal').classList.remove('active')">&times;</button>
+            <h2 style="margin-bottom: 2rem;">Create <span class="accent">Organization</span></h2>
+            <form id="create-org-form">
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">Organization
+                        Name</label>
+                    <input type="text" id="org-name" placeholder="Enter organization name" required
+                        style="width: 100%; padding: 0.75rem; background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-main);">
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">👑 Admin 1
+                        (Optional)</label>
+                    <input type="email" id="org-admin1" placeholder="admin1@example.com"
+                        style="width: 100%; padding: 0.75rem; background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-main);">
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">👑 Admin 2
+                        (Optional)</label>
+                    <input type="email" id="org-admin2" placeholder="admin2@example.com"
+                        style="width: 100%; padding: 0.75rem; background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-main);">
+                </div>
+                <button type="submit" class="btn btn-primary full-width">Create Organization</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Join Organization Modal -->
+    <div id="join-org-modal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close"
+                onclick="document.getElementById('join-org-modal').classList.remove('active')">&times;</button>
+            <h2 style="margin-bottom: 2rem;">Join <span class="accent">Organization</span></h2>
+            <form id="join-org-form">
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">Enter Invite
+                        Code</label>
+                    <input type="text" id="join-org-code" placeholder="XYZ67890" required maxlength="8"
+                        style="width: 100%; padding: 0.75rem; background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-main); text-transform: uppercase; letter-spacing: 2px; text-align: center; font-size: 1.2rem;">
+                </div>
+                <button type="submit" class="btn btn-primary full-width">Join Organization</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Invite Code Success Modal -->
+    <div id="invite-code-modal" class="modal">
+        <div class="modal-content" style="text-align: center;">
+            <button class="modal-close"
+                onclick="document.getElementById('invite-code-modal').classList.remove('active')">&times;</button>
+            <h2 style="margin-bottom: 1rem;">🎉 Success!</h2>
+            <p id="invite-message" style="color: var(--text-muted); margin-bottom: 2rem;"></p>
+            <div
+                style="background: var(--bg-card); padding: 1.5rem; border-radius: 12px; border: 2px dashed var(--primary); margin-bottom: 1.5rem;">
+                <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 0.5rem;">Your Invite Code</p>
+                <p id="invite-code-display"
+                    style="font-size: 2rem; font-weight: 800; color: var(--primary); letter-spacing: 4px; font-family: 'Courier New', monospace;">
+                </p>
+            </div>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <button onclick="copyInviteCode()" class="btn btn-primary" style="flex: 1;">📋 Copy Code</button>
+                <button onclick="shareInviteCode('whatsapp')" class="btn btn-outline" style="flex: 1;">Share</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team/Org Choice Modal -->
+    <div id="choice-modal" class="modal">
+        <div class="modal-content" style="text-align: center;">
+            <h2 style="margin-bottom: 2rem;">Choose Action</h2>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <button id="choice-create" class="btn btn-primary btn-lg full-width">Create New</button>
+                <button id="choice-join" class="btn btn-outline btn-lg full-width">Join Existing</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>
